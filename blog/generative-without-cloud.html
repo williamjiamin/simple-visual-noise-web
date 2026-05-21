@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Generative ambient without the cloud · Journal</title>
+  <meta name="description" content="A walkthrough of how the Simple Visual Noise composer evolves audio over time using ~20 lines of pattern data and a handful of modulators." />
+  <link rel="icon" href="../assets/icons/appicon-modern.png" />
+  <link rel="stylesheet" href="../styles/base.css" />
+  <link rel="stylesheet" href="../styles/layout.css" />
+  <style>
+    .post-hero { padding: 130px 0 30px; }
+    .post-body { padding: 40px 0 80px; }
+    .post-body .container { max-width: 720px; }
+    .post-body h2 {
+      font-family: var(--font-display);
+      font-size: 30px; font-weight: 500;
+      letter-spacing: -0.02em;
+      margin: 40px 0 12px;
+    }
+    .post-body p { font-size: 17px; line-height: 1.7; color: var(--text-primary); margin: 0 0 18px; }
+    .post-body p strong { color: var(--accent); }
+    .post-body pre, .post-body code {
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+    }
+    .post-body pre {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--card-stroke);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      overflow-x: auto;
+      color: var(--text-primary);
+      line-height: 1.55;
+      margin: 22px 0;
+    }
+    .post-body code { color: var(--accent); }
+    .post-body pre code { color: inherit; }
+    .meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a class="brand" href="../"><img src="../assets/icons/appicon-modern.png" alt="SVN" />Simple Visual Noise</a>
+      <div class="spacer"></div>
+      <ul class="nav-links">
+        <li><a href="../science.html">Science</a></li>
+        <li><a href="../pricing.html">Pricing</a></li>
+        <li><a href="./">Journal</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="post-hero">
+    <div class="container" style="max-width: 720px;">
+      <span class="meta">2026 · 05 · 18 · Engineering</span>
+      <h1 class="display" style="font-size: clamp(40px, 5.5vw, 64px); margin: 14px 0;">Generative ambient without the cloud</h1>
+      <p class="text-secondary" style="font-size: 17px;">
+        Endel sells generative as an AI feature with a subscription. We
+        argue it's a synthesis problem solved by ~250 lines of Swift —
+        on-device, free.
+      </p>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="container">
+      <p>
+        The promise of "generative ambient" is that no two minutes ever
+        sound exactly the same. The actual mechanism most apps use is
+        narrower than the marketing suggests: cross-fade a handful of
+        sample loops at slightly different points, modulate the volume of
+        each by a few independent envelopes, and let the listener's
+        pattern-matching brain do the rest.
+      </p>
+
+      <p>
+        We thought we could ship the same effect with ~5kB of code and
+        zero samples. Here's how.
+      </p>
+
+      <h2>1. A modulator is a function of time</h2>
+      <p>
+        We define a handful of <strong>modulator types</strong> — sine,
+        triangle, random walk, beating — each returning a value in
+        <code>[-1, 1]</code> for a given elapsed time.
+      </p>
+
+      <pre><code>case sinusoid(periodSec: Double)   // sin(2π · t / period)
+case triangle(periodSec: Double)
+case randomWalk(stepSec: Double)
+case beating(periodSecA: Double, periodSecB: Double)
+case hold                              // always returns 0</code></pre>
+
+      <h2>2. A recipe attaches a modulator to a layer</h2>
+      <p>
+        Each ambient layer gets one recipe: which modulator drives it,
+        how much depth (the half-range of gain swing), an optional pan
+        depth, and a phase offset so neighboring layers don't peak at
+        the same moment.
+      </p>
+
+      <pre><code>struct LayerRecipe {
+  var modulator: Modulator
+  var depth: Float       // ±depth gain swing around the baseline
+  var panDepth: Float    // optional ±panDepth pan swing
+  var phaseOffset: Double
+}</code></pre>
+
+      <h2>3. A pattern is a list of recipes</h2>
+      <p>
+        Picking a pattern means picking how the layers evolve. The
+        <em>focus-flow</em> pattern uses three slow sinusoids at
+        incommensurate periods (90s, 120s, 150s) with offset phases. The
+        <em>dream-shift</em> pattern uses three random walks for surreal
+        layer juxtapositions. The <em>ambience-shimmer</em> pattern uses
+        three beating pairs at fast/medium/slow scales.
+      </p>
+
+      <pre><code>focus-flow:
+  layer[0]: sinusoid(90s),  depth=0.10, phase=0
+  layer[1]: sinusoid(120s), depth=0.12, phase=0.33
+  layer[2]: sinusoid(150s), depth=0.08, phase=0.66
+  baseNoise: sinusoid(180s), depth=0.04</code></pre>
+
+      <h2>4. The composer is a 1Hz timer</h2>
+      <p>
+        Every second (or twice a second, depending on the pattern), the
+        composer evaluates each recipe and applies the result to the
+        live audio graph. Snapshot the layer baselines at start time so
+        the user's chosen mix is the center of evolution — we never
+        overwrite their dial, we drift around it.
+      </p>
+
+      <pre><code>tick() {
+  let t = elapsedSec
+  for (layer, recipe) in zip(layers, pattern.recipes) {
+    let v = recipe.modulator.value(at: t + recipe.phaseOffset)
+    let gain = clamp01(baseline[layer] + v * recipe.depth * intensity)
+    engine.setLayerGain(layer.id, gain)
+  }
+}</code></pre>
+
+      <h2>Why this matches "endless and never repeats"</h2>
+      <p>
+        Three sinusoids at incommensurate periods (90, 120, 150) produce
+        a global pattern that only fully repeats every
+        <code>LCM(90, 120, 150) / 60 ≈ 30 minutes</code>. Add random
+        walks and the period is <em>infinite</em>. Add pan modulation and
+        you get the spatial drift that gives Endel's marketing copy its
+        "spatial AI" flavor. None of it requires a model checkpoint.
+      </p>
+
+      <h2>CPU cost</h2>
+      <p>
+        On an iPhone 17 Pro Max, the composer ticking at 1Hz across six
+        ambient layers + the base noise consumes <strong>under 0.4 %</strong>
+        of one CPU core. The audio synthesis itself (pink noise via Paul
+        Kellet's filter, brown via a leaky integrator) consumes another
+        ~2 %. A cloud generative engine, by contrast, requires network
+        round-trips, model load, and audio streaming — typically 10-50×
+        more battery for the same listener perception.
+      </p>
+
+      <h2>Where the trick lives</h2>
+      <p>
+        The trick isn't in the math — it's in the <strong>tuning</strong>.
+        Picking depths small enough that the listener doesn't notice
+        movement, but large enough that they don't get bored, is taste,
+        not algorithm. We spent more time tuning the eight shipped
+        patterns than we spent writing the engine. The engine is open in
+        spirit; the curation is the product.
+      </p>
+
+      <p style="margin-top: 40px;" class="meta">— Engineering log, 2026-05-18</p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>
+        <a class="brand" href="../"><img src="../assets/icons/appicon-modern.png" alt="SVN" />Simple Visual Noise</a>
+      </div>
+      <div class="footer-links">
+        <a href="../science.html">Science</a>
+        <a href="../pricing.html">Pricing</a>
+        <a href="../press.html">Press</a>
+        <a href="./">Journal</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

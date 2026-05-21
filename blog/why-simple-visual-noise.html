@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Why we built Simple Visual Noise · Journal</title>
+  <meta name="description" content="A manifesto on what an ambient-sound app could be if it were a synth and not a sample library." />
+  <link rel="icon" href="../assets/icons/appicon-modern.png" />
+  <link rel="stylesheet" href="../styles/base.css" />
+  <link rel="stylesheet" href="../styles/layout.css" />
+  <style>
+    .post-hero { padding: 130px 0 30px; }
+    .post-body { padding: 40px 0 80px; }
+    .post-body .container { max-width: 720px; }
+    .post-body h2 {
+      font-family: var(--font-display);
+      font-size: 30px; font-weight: 500;
+      letter-spacing: -0.02em;
+      margin: 40px 0 12px;
+    }
+    .post-body p { font-size: 17px; line-height: 1.7; color: var(--text-primary); margin: 0 0 18px; }
+    .post-body p strong { color: var(--accent); }
+    .post-body blockquote {
+      border-left: 2px solid var(--accent);
+      padding: 6px 0 6px 20px;
+      margin: 24px 0;
+      font-style: italic;
+      color: var(--text-secondary);
+      font-size: 17px;
+    }
+    .meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a class="brand" href="../"><img src="../assets/icons/appicon-modern.png" alt="SVN" />Simple Visual Noise</a>
+      <div class="spacer"></div>
+      <ul class="nav-links">
+        <li><a href="../science.html">Science</a></li>
+        <li><a href="../pricing.html">Pricing</a></li>
+        <li><a href="./">Journal</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="post-hero">
+    <div class="container" style="max-width: 720px;">
+      <span class="meta">2026 · 05 · 12 · Manifesto</span>
+      <h1 class="display" style="font-size: clamp(40px, 5.5vw, 64px); margin: 14px 0;">Why we built Simple Visual Noise</h1>
+      <p class="text-secondary" style="font-size: 17px;">
+        Every ambient-sound app on the store ships a library of MP3s. We
+        thought there was a more interesting answer.
+      </p>
+    </div>
+  </section>
+
+  <section class="post-body">
+    <div class="container">
+      <p>
+        Open the App Store and search "white noise". You'll see thirty
+        apps, all variations of the same thing: a grid of preset cards,
+        each one a 30-second sample looped. The interface is a volume
+        slider. Maybe a timer. The premium tier costs $4 a month for
+        access to <em>more samples</em>.
+      </p>
+
+      <p>
+        Sound is interesting. The app category that surrounds it is not.
+      </p>
+
+      <h2>What we wanted instead</h2>
+      <p>
+        Three things that don't exist together anywhere:
+      </p>
+
+      <p>
+        <strong>1. A synth, not a sample library.</strong> Every sample
+        loops. Every loop has a seam your brain learns to hear over the
+        first ten minutes. Procedural noise has no loop — α (the spectral
+        tilt parameter) gives you a continuous palette from "super bright"
+        to "deeper than brown", and every second is novel.
+      </p>
+
+      <p>
+        <strong>2. Premade visuals, never streamed AI.</strong> The
+        mood-image generation category is exciting in the abstract and
+        frustrating in practice — surprise outputs, slow latency, network
+        dependence. We pre-rendered ten Krea moods, reviewed every one,
+        and shipped them in the bundle. The mood layer is therefore
+        deterministic, fast, and under our editorial control.
+      </p>
+
+      <p>
+        <strong>3. Generative composition without a subscription.</strong>
+        Endel's pitch — "infinite personalized soundscapes" — turns out
+        to be ~250 lines of code if you build it as a synthesis problem
+        instead of an AI product. Per-layer modulators (sine, triangle,
+        random-walk, beating) with phase offsets, evolving the mix over
+        minutes. The composer is part of the app, not a service.
+      </p>
+
+      <h2>What we left behind</h2>
+      <p>
+        Subscriptions. Sample marketplaces. "Sleep stories" with
+        celebrity voiceovers. Daily content drops. Account systems. Push
+        notifications. Cloud personalization. We don't take any of those
+        bets — they all push the app toward attention-economy churn and
+        away from being a tool you forget about and trust.
+      </p>
+
+      <blockquote>
+        A sound app should feel like a Casio digital watch: bought once,
+        carried for a decade, never needs anything from you.
+      </blockquote>
+
+      <h2>What's next</h2>
+      <p>
+        We're keeping the core sound engine simple and pushing depth
+        into adjacent surfaces: the Apple Watch companion, Live Activity,
+        spatial audio. The web demo on this site runs the same procedural
+        engine, ported to WebAudio, so you can hear what the app does
+        before buying it. If that demo doesn't sell the idea — we built
+        the wrong app.
+      </p>
+
+      <p style="margin-top: 40px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; color: var(--text-secondary);">
+        — William Jia Min, founder
+      </p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>
+        <a class="brand" href="../"><img src="../assets/icons/appicon-modern.png" alt="SVN" />Simple Visual Noise</a>
+      </div>
+      <div class="footer-links">
+        <a href="../science.html">Science</a>
+        <a href="../pricing.html">Pricing</a>
+        <a href="../press.html">Press</a>
+        <a href="./">Journal</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

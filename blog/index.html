@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Journal · Simple Visual Noise</title>
+  <meta name="description" content="Notes from building Simple Visual Noise — synthesis decisions, sound science, retrospectives." />
+  <link rel="icon" href="../assets/icons/appicon-modern.png" />
+  <link rel="stylesheet" href="../styles/base.css" />
+  <link rel="stylesheet" href="../styles/layout.css" />
+  <style>
+    .blog-hero { padding: 140px 0 40px; }
+    .post-list {
+      display: grid; gap: 18px;
+      grid-template-columns: 1fr;
+    }
+    .post-card { padding: 28px 32px; transition: transform 0.18s; }
+    .post-card:hover { transform: translateY(-2px); }
+    .post-card a { color: var(--text-primary); }
+    .post-card h3 {
+      font-family: var(--font-display);
+      font-size: 28px; font-weight: 500;
+      letter-spacing: -0.02em;
+      margin: 8px 0;
+    }
+    .post-card .meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .post-card p { color: var(--text-secondary); font-size: 14.5px; margin: 8px 0 0; line-height: 1.55; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a class="brand" href="../"><img src="../assets/icons/appicon-modern.png" alt="SVN" />Simple Visual Noise</a>
+      <div class="spacer"></div>
+      <ul class="nav-links">
+        <li><a href="../science.html">Science</a></li>
+        <li><a href="../pricing.html">Pricing</a></li>
+        <li><a href="../press.html">Press</a></li>
+        <li><a href="./" style="color: var(--text-primary);">Journal</a></li>
+        <li><a class="btn-ghost" href="../#download">Download</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="blog-hero">
+    <div class="container">
+      <span class="eyebrow">Journal · open notebook</span>
+      <h1 class="display" style="font-size: clamp(48px, 7vw, 88px); margin-top: 14px;">Notes from<br/><span class="italic accent">a sound studio.</span></h1>
+      <p class="text-secondary" style="max-width: 60ch; margin-top: 18px; font-size: 17px;">
+        Long-form posts about synthesis decisions, sound psychoacoustics,
+        and what we learned building this. Updated when we have something
+        worth saying.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="post-list">
+        <article class="glass-card post-card">
+          <a href="./why-simple-visual-noise.html">
+            <span class="meta">2026 · 05 · 12 — Manifesto</span>
+            <h3>Why we built Simple Visual Noise</h3>
+            <p>Every ambient-sound app on the store ships a library of MP3s. We thought there was a more interesting answer: ship a synth that runs in the user's pocket.</p>
+          </a>
+        </article>
+        <article class="glass-card post-card">
+          <a href="./generative-without-cloud.html">
+            <span class="meta">2026 · 05 · 18 — Engineering</span>
+            <h3>Generative ambient without the cloud</h3>
+            <p>Endel sells generative as an AI feature with a monthly subscription. We argue it's a synthesis problem solved by ~250 lines of Swift and ~20 lines of pattern data — on-device, free.</p>
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>
+        <a class="brand" href="../"><img src="../assets/icons/appicon-modern.png" alt="SVN" />Simple Visual Noise</a>
+      </div>
+      <div class="footer-links">
+        <a href="../science.html">Science</a>
+        <a href="../pricing.html">Pricing</a>
+        <a href="../press.html">Press</a>
+        <a href="./">Journal</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

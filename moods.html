@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mood gallery · Simple Visual Noise</title>
+  <meta name="description" content="Hover any mood image to hear its curated noise recipe. Ten hand-photographed Krea moods, each paired with a tuned synthesis preset." />
+  <link rel="icon" href="./assets/icons/appicon-modern.png" />
+  <link rel="stylesheet" href="./styles/base.css" />
+  <link rel="stylesheet" href="./styles/layout.css" />
+  <style>
+    .gallery-hero { padding: 130px 0 32px; }
+    .mood-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .mood-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 9 / 16;
+      padding: 0;
+      background: var(--surface);
+      border: 1px solid var(--card-stroke);
+      cursor: pointer;
+      transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
+    }
+    .mood-card:hover, .mood-card:focus-visible {
+      transform: translateY(-3px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px var(--card-tone, var(--accent));
+      border-color: transparent;
+    }
+    .mood-card img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s, filter 0.4s;
+    }
+    .mood-card:hover img,
+    .mood-card:focus-visible img {
+      transform: scale(1.04);
+      filter: saturate(115%) brightness(0.95);
+    }
+    .mood-card::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.85) 100%);
+      pointer-events: none;
+    }
+    .mood-card-body {
+      position: absolute;
+      left: 14px; right: 14px; bottom: 14px;
+      display: flex; flex-direction: column; gap: 4px;
+      color: var(--text-primary);
+      text-align: left;
+    }
+    .mood-card-label { font-family: var(--font-display); font-size: 22px; letter-spacing: -0.01em; }
+    .mood-card-mono { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; color: var(--text-secondary); }
+    .hint-row {
+      display: flex; align-items: center; gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+  </style>
+  <script type="module" src="./js/gallery.js"></script>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a class="brand" href="./"><img src="./assets/icons/appicon-modern.png" alt="SVN" />Simple Visual Noise</a>
+      <div class="spacer"></div>
+      <ul class="nav-links">
+        <li><a href="./science.html">Science</a></li>
+        <li><a href="./moods.html" style="color: var(--text-primary);">Moods</a></li>
+        <li><a href="./pricing.html">Pricing</a></li>
+        <li><a href="./press.html">Press</a></li>
+        <li><a href="./blog/">Journal</a></li>
+        <li><a class="btn-ghost" href="./#download">Download</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="gallery-hero">
+    <div class="container">
+      <span class="eyebrow">10 moods · hover to hear</span>
+      <h1 class="display" style="font-size: clamp(48px, 7vw, 88px); margin: 14px 0;">Pick the air<br/><span class="italic accent">you want to be in.</span></h1>
+      <p class="text-secondary" style="max-width: 60ch; font-size: 17px; margin-bottom: 18px;">
+        Each card pairs a hand-photographed Krea mood image with a tuned
+        synthesis recipe — a color, a spectral tilt, a gain. Hover (or tap
+        and hold on mobile) to hear it. Click to lock the audio on.
+      </p>
+      <div class="hint-row">
+        <span class="glass-chip">🔇 starts silent</span>
+        <span class="glass-chip">🎧 headphones recommended</span>
+        <span class="glass-chip">📐 9:16 hero-image source</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top: 0;">
+    <div class="container">
+      <div id="mood-gallery" class="mood-gallery"></div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>
+        <a class="brand" href="./"><img src="./assets/icons/appicon-modern.png" alt="SVN" />Simple Visual Noise</a>
+      </div>
+      <div class="footer-links">
+        <a href="./science.html">Science</a>
+        <a href="./moods.html">Moods</a>
+        <a href="./pricing.html">Pricing</a>
+        <a href="./press.html">Press</a>
+        <a href="./blog/">Journal</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

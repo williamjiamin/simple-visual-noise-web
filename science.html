@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The science · Simple Visual Noise</title>
+  <meta name="description" content="Spectral tilt, binaural beats, and generative composition — explained with live interactive examples you can hear in your browser." />
+  <link rel="icon" href="./assets/icons/appicon-modern.png" />
+  <link rel="stylesheet" href="./styles/base.css" />
+  <link rel="stylesheet" href="./styles/layout.css" />
+  <style>
+    .science-hero {
+      padding: 140px 0 60px;
+      background: radial-gradient(ellipse at top, #1d1612 0%, var(--bg-deep) 70%);
+    }
+    .widget {
+      margin-block: 32px;
+      display: grid;
+      gap: 18px;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 760px) {
+      .widget { grid-template-columns: 1fr 1.4fr; align-items: center; }
+    }
+    .widget-control { display: flex; flex-direction: column; gap: 14px; }
+    .widget-control label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); }
+    .widget-control .row { display: flex; gap: 10px; align-items: center; }
+    .widget-control input[type="range"] { flex: 1; accent-color: var(--accent); }
+    .widget-control select { background: var(--glass); border: 1px solid var(--chip-stroke); border-radius: var(--radius-sm); padding: 8px 12px; color: var(--text-primary); }
+    .widget-control .readout { font-family: var(--font-mono); font-size: 12px; min-width: 70px; text-align: right; color: var(--text-secondary); }
+    .widget-control .badge { display:inline-block; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.15em; padding: 4px 10px; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; align-self: flex-start; }
+    .widget .w-play {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 10px 22px; border-radius: 999px;
+      background: linear-gradient(180deg, var(--accent-glow), var(--accent));
+      color: #1a0c04; font-weight: 600; font-size: 14px;
+      box-shadow: 0 12px 28px rgba(255, 138, 61, 0.4);
+      align-self: flex-start;
+    }
+    .widget .w-play.is-active {
+      background: rgba(255,255,255,0.08); color: var(--text-primary); box-shadow: none;
+    }
+    .widget-explain h3 {
+      font-family: var(--font-display);
+      font-size: 32px; font-weight: 500;
+      letter-spacing: -0.02em; line-height: 1.05;
+      margin: 0 0 12px;
+    }
+    .widget-explain p { color: var(--text-secondary); font-size: 15px; line-height: 1.6; margin: 0 0 12px; }
+    .widget-explain p:last-child { margin-bottom: 0; }
+  </style>
+  <script type="module" src="./js/science.js"></script>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container">
+      <a class="brand" href="./"><img src="./assets/icons/appicon-modern.png" alt="SVN" />Simple Visual Noise</a>
+      <div class="spacer"></div>
+      <ul class="nav-links">
+        <li><a href="./science.html" style="color: var(--text-primary);">Science</a></li>
+        <li><a href="./pricing.html">Pricing</a></li>
+        <li><a href="./press.html">Press</a></li>
+        <li><a href="./blog/">Journal</a></li>
+        <li><a class="btn-ghost" href="./#download">Download</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="science-hero">
+    <div class="container">
+      <span class="eyebrow">Hear it, then read it</span>
+      <h1 class="display" style="font-size: clamp(48px, 7vw, 88px); margin-top: 14px;">
+        The science <span class="italic accent">of drift.</span>
+      </h1>
+      <p class="text-secondary" style="max-width: 60ch; margin-top: 18px; font-size: 17px;">
+        Three interactive demos. Each runs locally in your browser via
+        WebAudio. No samples, no streaming — every sound below is generated
+        live, the same way the iOS app does it.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <article class="glass-card widget" id="w-tilt">
+        <div class="widget-control">
+          <span class="badge">Demo 01 · Spectral tilt</span>
+          <div class="row">
+            <label for="w-tilt-tilt" style="width: 80px;">α</label>
+            <input class="w-tilt" id="w-tilt-tilt" type="range" min="-2" max="2" step="0.01" value="1" />
+            <span class="readout"><span class="w-tilt-readout">1.00</span></span>
+          </div>
+          <div class="row">
+            <label>Color</label>
+            <span class="readout w-color-readout">PINK</span>
+          </div>
+          <button class="w-play" type="button">Play</button>
+        </div>
+        <div class="widget-explain">
+          <h3>Spectral tilt is a slider, not a label.</h3>
+          <p>
+            Most apps give you a fixed menu of "white / pink / brown". We
+            expose the underlying parameter: <strong>α</strong>, the
+            negative slope of the power spectrum. White is α≈0; pink is α≈1;
+            brown is α≈2. Everything in between is a fluid blend.
+          </p>
+          <p>
+            Drag the slider above. At α≈0.4 you'll hear a "warm white"
+            that's hard to find elsewhere. At α≈1.6 you get a "deeper than
+            pink, brighter than brown" — the band most users settle into
+            for sleep.
+          </p>
+        </div>
+      </article>
+
+      <article class="glass-card widget" id="w-binaural">
+        <div class="widget-control">
+          <span class="badge">Demo 02 · Binaural</span>
+          <div class="row">
+            <label>Carrier</label>
+            <input class="w-carrier" type="range" min="80" max="600" step="1" value="200" />
+            <span class="readout w-carrier-readout">200 Hz</span>
+          </div>
+          <div class="row">
+            <label>Beat Δ</label>
+            <input class="w-beat" type="range" min="0.5" max="30" step="0.1" value="6" />
+            <span class="readout w-beat-readout">6.0 Hz</span>
+          </div>
+          <div class="row">
+            <label>Band</label>
+            <span class="readout w-band">Theta · drift / dream</span>
+          </div>
+          <button class="w-play" type="button">Play</button>
+          <p class="text-tertiary" style="font-size: 11.5px;">⚠ Use headphones — binaural beats require stereo separation.</p>
+        </div>
+        <div class="widget-explain">
+          <h3>Binaural beats are a perception trick.</h3>
+          <p>
+            Play one tone in the left ear, a slightly different tone in
+            the right. Your brain hears a third tone — the beat between
+            them. Research on entrainment is mixed; we ship it as a
+            *cue layer*, not a treatment. A 6 Hz beat won't put you to sleep,
+            but it pairs nicely with a sleep-mode soundscape.
+          </p>
+          <p>
+            Drag the beat slider. The band readout shows which neural
+            rhythm range you're cueing — delta for deep sleep, alpha for
+            relaxed focus, gamma for high alertness.
+          </p>
+        </div>
+      </article>
+
+      <article class="glass-card widget" id="w-composer">
+        <div class="widget-control">
+          <span class="badge">Demo 03 · Generative composer</span>
+          <div class="row">
+            <label>Pattern</label>
+            <select class="w-pattern"></select>
+          </div>
+          <p class="w-pattern-summary text-secondary" style="font-size:12.5px; margin:0;"></p>
+          <div class="row">
+            <label>Intensity</label>
+            <input class="w-intensity" type="range" min="0" max="1" step="0.01" value="0.85" />
+            <span class="readout w-intensity-readout">85%</span>
+          </div>
+          <button class="w-play" type="button">Play</button>
+        </div>
+        <div class="widget-explain">
+          <h3>The composer doesn't sample anything.</h3>
+          <p>
+            Each pattern is a tiny declarative recipe — a list of per-layer
+            modulators (sine, triangle, random-walk, beating) with phase
+            offsets so layers never peak simultaneously. The recipes are
+            tiny (~20 lines each); the perceived variety is large because
+            modulator combinations rarely line up.
+          </p>
+          <p>
+            Pick a pattern. Set intensity. Hit play. The mix drifts. After
+            two minutes you'll never have heard the same instant twice —
+            and the CPU cost is under 1 % because everything is math, no
+            buffers.
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>
+        <a class="brand" href="./" style="margin-bottom:8px;"><img src="./assets/icons/appicon-modern.png" alt="SVN" />Simple Visual Noise</a>
+      </div>
+      <div class="footer-links">
+        <a href="./science.html">Science</a>
+        <a href="./pricing.html">Pricing</a>
+        <a href="./press.html">Press</a>
+        <a href="./blog/">Journal</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
