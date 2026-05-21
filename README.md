@@ -1,8 +1,30 @@
 # Simple Visual Noise — marketing website
 
+**Live**: <https://williamjiamin.github.io/simple-visual-noise-web/>
+
 Static site that doubles as an interactive demo for the iOS app. Everything
 runs in vanilla HTML / CSS / ES modules + the WebAudio API — no build step,
 no framework, no tracking.
+
+## Deploy (GitHub Pages)
+
+This repo is wired to GitHub Pages on `main` / root. Every push to `main`
+triggers a redeploy. Build typically completes in 30–60 seconds.
+
+To deploy a change:
+
+```bash
+git add -A
+git commit -m "..."
+git push
+```
+
+Check build status:
+
+```bash
+gh api repos/williamjiamin/simple-visual-noise-web/pages/builds/latest \
+  --jq '{status, html_url: .commit, error}'
+```
 
 ## Run locally
 
